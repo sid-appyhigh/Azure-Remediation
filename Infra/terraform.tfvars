@@ -1,0 +1,1 @@
+nsg_names = ["testnsg1", "testnsg2", "testnsg3"]

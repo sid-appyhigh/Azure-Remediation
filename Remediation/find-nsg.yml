@@ -1,0 +1,39 @@
+---
+- hosts: localhost
+  connection: local
+  vars_files:
+    - variables.yml
+  tasks:
+
+    - name: Create file to store list of NSGs
+      copy:
+        dest: "nsg"
+        content: |
+          [nsg]
+
+    - name: Create file to store the JSON output
+      copy:
+        dest: "info.json"
+        content: |
+          {}
+
+    - name: Get facts for all NSG in RG
+      azure_rm_securitygroup_info:
+        resource_group: "{{resourceGroup}}"
+      register: droplet_result
+    
+    - debug:
+       var: droplet_result
+
+    - name: Write content to the file
+      copy:
+        dest: "info.json"
+        content: |
+          {{ droplet_result }}
+
+    - name: execute script to find the NSGs with 3389 open port
+      command: python3 find_nsg.py
+      register: result
+
+    - debug:
+       msg: "The NSGs with 3389 port open are : {{ result.stdout_lines }} "

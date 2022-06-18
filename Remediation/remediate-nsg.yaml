@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  connection: local
+  vars_files:
+    - variables.yml
+  tasks:
+    - name: Remediate the NSG rules which are open on port 3389
+      azure_rm_securitygroup:
+       resource_group: "{{resourceGroup}}"
+       name: "{{item.split(':')[0]}}"
+       rules:
+          - name: "{{item.split(':')[1]}}"
+            protocol: Tcp
+            destination_port_range: 3389
+            access: Deny
+            priority: 100
+            direction: Inbound
+      with_items: "{{ groups['nsg'] }}"
