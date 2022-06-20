@@ -34,13 +34,20 @@ Remediation use cases - Microsoft Azure - #2
 
 ## How to run the script? or How to execute the command?
 
- 1. In the ``` Remediation``` folder, edit the variables.yml add the name of the resource group to check for NSG.
- 2. Run the Identify-nsg.yml to find the NSGs with the port 3389 open.
+ 1. Define Ansible environment variables. On the host virtual machine, export the service principal values to configure your Ansible credentials.
+   ``` 
+       export AZURE_SUBSCRIPTION_ID=<your-subscription_id>
+       export AZURE_CLIENT_ID=<security-principal-appid>
+       export AZURE_SECRET=<security-principal-password>
+       export AZURE_TENANT=<security-principal-tenant>
+   ```
+ 2. In the ``` Remediation``` folder, edit the variables.yml add the name of the resource group to check for NSG.
+ 3. Run the Identify-nsg.yml to find the NSGs with the port 3389 open.
    ``` ansible-playbook Identify-nsg.yml ```
- 3. Once the NSGs with 3389 port open are identified it will create a file named ```nsg``` with the name of the NSGs and the name of the rule which has the port 3389 open.
- 4. Now, run the remediate-nsg.yml to Deny the rules which has the 3389 port.
+ 4. Once the NSGs with 3389 port open are identified it will create a file named ```nsg``` with the name of the NSGs and the name of the rule which has the port 3389 open.
+ 5. Now, run the remediate-nsg.yml to Deny the rules which has the 3389 port.
    ```ansible-playbook  remediate-nsg.yml -i nsg```
- 5. [Optional] Can run the Identify-nsg.yml script again to check if any NSGs are remaining with the port 3389 open.
+ 6. [Optional] Can run the Identify-nsg.yml script again to check if any NSGs are remaining with the port 3389 open.
    
 ## Details about the variables/parameters used
 
