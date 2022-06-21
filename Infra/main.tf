@@ -14,11 +14,13 @@ provider "azurerm" {
   features {}
 }
 
+# Create a Resource Group
 resource "azurerm_resource_group" "testrg" {
   name     = "testrg"
   location = "eastus2"
 }
  
+# Create 3 different Network Security Groups
 resource "azurerm_network_security_group" "testnsg" {
   count = 3
   name                = var.nsg_names[count.index]
@@ -27,6 +29,7 @@ resource "azurerm_network_security_group" "testnsg" {
  
 }
  
+# Define the rules for the first NSG
 resource "azurerm_network_security_rule" "testrules1" {
   for_each                    = local.nsgrules 
   name                        = each.key
@@ -43,6 +46,7 @@ resource "azurerm_network_security_rule" "testrules1" {
   depends_on = [azurerm_network_security_group.testnsg]
 }
 
+# Define the rules for the second NSG
 resource "azurerm_network_security_rule" "testrules2" {
   for_each                    = local.nsgrules2 
   name                        = each.key
@@ -59,6 +63,7 @@ resource "azurerm_network_security_rule" "testrules2" {
   depends_on = [azurerm_network_security_group.testnsg]
 }
 
+# Define the rules for the third NSG
 resource "azurerm_network_security_rule" "testrules3" {
   for_each                    = local.nsgrules 
   name                        = each.key
